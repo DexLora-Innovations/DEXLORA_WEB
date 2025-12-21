@@ -49,11 +49,11 @@ const HeroSection = () => {
 
         {/* Tagline */}
         <p className="animate-fade-up-delay-2 text-xl md:text-2xl lg:text-3xl text-muted-foreground font-light mb-8 max-w-2xl">
-          "Building Digital & Smart Solutions for the Future"
+          Building Digital & Smart Solutions for the Future
         </p>
 
         {/* Services separator */}
-        <div className="animate-fade-up-delay-3 flex flex-wrap items-center justify-center gap-3 md:gap-4 text-sm md:text-base text-muted-foreground">
+        <div className="animate-fade-up-delay-3 flex flex-wrap items-center justify-center gap-3 md:gap-4 text-sm md:text-base text-muted-foreground mb-10">
           <span className="px-4 py-2 glass-card text-foreground/90">Websites</span>
           <span className="text-primary text-lg">•</span>
           <span className="px-4 py-2 glass-card text-foreground/90">Apps</span>
@@ -65,10 +65,25 @@ const HeroSection = () => {
           <span className="px-4 py-2 glass-card text-foreground/90">IoT Hardware</span>
         </div>
 
+        {/* CTA Buttons */}
+        <div className="animate-fade-up-delay-4 flex flex-wrap items-center justify-center gap-4">
+          <a
+            href="/services"
+            className="px-8 py-3 bg-gradient-to-r from-primary to-accent text-primary-foreground font-semibold rounded-full hover:opacity-90 hover:scale-105 transition-all duration-300 shadow-lg shadow-primary/25"
+          >
+            Learn More
+          </a>
+          <a
+            href="/contact"
+            className="px-8 py-3 border-2 border-primary/50 text-foreground font-semibold rounded-full hover:bg-primary/10 hover:border-primary transition-all duration-300"
+          >
+            Contact Us
+          </a>
+        </div>
+
         {/* Scroll indicator */}
         <div className="animate-fade-up-delay-4 absolute bottom-8 left-1/2 -translate-x-1/2">
           <div className="flex flex-col items-center gap-2 text-muted-foreground">
-            <span className="text-sm tracking-widest uppercase">Scroll</span>
             <div className="w-6 h-10 border-2 border-muted-foreground/50 rounded-full flex justify-center">
               <div className="w-1.5 h-3 bg-primary rounded-full mt-2 animate-bounce" />
             </div>
