@@ -1,6 +1,7 @@
 import { Helmet } from "react-helmet-async";
 import Navbar from "@/components/Navbar";
-import { Mail, Instagram, Linkedin, MessageCircle } from "lucide-react";
+import Footer from "@/components/Footer";
+import { Mail, Instagram, Linkedin, MessageCircle, Facebook } from "lucide-react";
 
 const contactOptions = [
   {
@@ -34,6 +35,14 @@ const contactOptions = [
     href: "https://wa.me/917092269839",
     color: "from-green-500/20 to-emerald-500/20",
     hoverGlow: "hover:shadow-green-500/20",
+  },
+  {
+    icon: Facebook,
+    title: "Facebook",
+    text: "Follow DexLora Innovations for news, updates, and community engagement.",
+    href: "https://www.facebook.com/profile.php?id=61585169746090",
+    color: "from-blue-600/20 to-blue-400/20",
+    hoverGlow: "hover:shadow-blue-600/20",
   },
 ];
 
@@ -94,7 +103,7 @@ const Contact = () => {
         {/* Contact Options Grid */}
         <section className="py-16 md:py-24">
           <div className="container mx-auto px-4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 max-w-7xl mx-auto">
               {contactOptions.map((option, index) => (
                 <a
                   key={option.title}
@@ -141,10 +150,9 @@ const Contact = () => {
             </div>
           </div>
         </section>
-
-        {/* Bottom spacing */}
-        <div className="h-16" />
       </main>
+
+      <Footer />
     </>
   );
 };

@@ -1,5 +1,6 @@
 import { Helmet } from "react-helmet-async";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import HeroSection from "@/components/HeroSection";
 import FoundersSection from "@/components/FoundersSection";
 import ConnectSection from "@/components/ConnectSection";
@@ -27,16 +28,8 @@ const Index = () => {
         <FoundersSection />
         <ConnectSection />
         <CTASection />
-        
-        {/* Footer */}
-        <footer className="py-8 px-6 border-t border-border/30">
-          <div className="max-w-7xl mx-auto text-center">
-            <p className="text-muted-foreground text-sm">
-              © {new Date().getFullYear()} DexLora Innovations. All rights reserved.
-            </p>
-          </div>
-        </footer>
       </main>
+      <Footer />
     </>
   );
 };
