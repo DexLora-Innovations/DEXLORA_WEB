@@ -1,7 +1,7 @@
 import { Helmet } from "react-helmet-async";
 import Navbar from "@/components/Navbar";
-import { Instagram, Linkedin, MessageCircle, Phone, Mail, MapPin } from "lucide-react";
-
+import Footer from "@/components/Footer";
+import { Instagram, Linkedin, MessageCircle, Facebook, Phone, Mail, MapPin } from "lucide-react";
 const services = [
   {
     title: "Custom Website Development",
@@ -239,7 +239,7 @@ const Services = () => {
                 <div className="flex items-center gap-4">
                   {/* Instagram */}
                   <a
-                    href="https://instagram.com"
+                    href="https://www.instagram.com/dexlora_innovations?utm_source=qr&igsh=MXU2amV0eGZyeWNscQ=="
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-14 h-14 rounded-full glass-card border border-border/30 flex items-center justify-center hover:border-pink-500/50 hover:shadow-lg hover:shadow-pink-500/20 transition-all duration-300 group"
@@ -259,12 +259,22 @@ const Services = () => {
 
                   {/* LinkedIn */}
                   <a
-                    href="https://www.linkedin.com/company/dexlora-innovations"
+                    href="https://www.linkedin.com/in/dexlora-innovations/"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-14 h-14 rounded-full glass-card border border-border/30 flex items-center justify-center hover:border-blue-500/50 hover:shadow-lg hover:shadow-blue-500/20 transition-all duration-300 group"
                   >
                     <Linkedin className="w-6 h-6 text-muted-foreground group-hover:text-blue-500 transition-colors" />
+                  </a>
+
+                  {/* Facebook */}
+                  <a
+                    href="https://www.facebook.com/profile.php?id=61585169746090"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-14 h-14 rounded-full glass-card border border-border/30 flex items-center justify-center hover:border-blue-600/50 hover:shadow-lg hover:shadow-blue-600/20 transition-all duration-300 group"
+                  >
+                    <Facebook className="w-6 h-6 text-muted-foreground group-hover:text-blue-600 transition-colors" />
                   </a>
                 </div>
               </div>
@@ -272,6 +282,7 @@ const Services = () => {
           </div>
         </section>
       </main>
+      <Footer />
     </>
   );
 };
