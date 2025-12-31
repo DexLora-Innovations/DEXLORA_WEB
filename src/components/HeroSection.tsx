@@ -22,7 +22,7 @@ const HeroSection = () => {
   }, []);
 
   return (
-    <section ref={sectionRef} className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
+    <section ref={sectionRef} className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden overflow-x-hidden">
       {/* Background gradient */}
       <div className="absolute inset-0 bg-gradient-to-b from-background via-background to-muted/20" />
 
@@ -47,7 +47,7 @@ const HeroSection = () => {
 
       {/* Radial glow effects - optimized with composite transformation */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full bg-gradient-radial from-primary/10 via-accent/5 to-transparent blur-3xl pointer-events-none" style={{ transform: 'translate3d(-50%, -50%, 0)' }} />
-      <div className="absolute bottom-1/4 right-1/4 w-[600px] h-[600px] rounded-full bg-gradient-radial from-secondary/10 via-secondary/5 to-transparent blur-3xl pointer-events-none" style={{ transform: 'translate3d(0, 0, 0)' }} />
+      <div className="absolute bottom-1/4 right-1/4 w-[600px] h-[600px] rounded-full bg-gradient-radial from-secondary/10 via-secondary/5 to-transparent blur-3xl pointer-events-none hidden md:block" style={{ transform: 'translate3d(0, 0, 0)' }} />
 
       {/* Animated particles - Reduced count for performance */}
       <div className="particles-bg">
@@ -68,7 +68,7 @@ const HeroSection = () => {
       </div>
 
       {/* Main content */}
-      <div className="relative z-10 flex flex-col items-center text-center px-6 max-w-4xl mx-auto pt-16">
+      <div className="relative z-10 flex flex-col items-center text-center px-4 sm:px-6 w-full max-w-4xl mx-auto pt-16">
         {/* Logo */}
         <div className="animate-fade-up mb-6" style={{ willChange: 'transform, opacity' }}>
           <div className="relative w-40 h-40 md:w-56 md:h-56 lg:w-64 lg:h-64">
