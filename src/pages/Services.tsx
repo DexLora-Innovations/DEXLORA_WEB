@@ -1,544 +1,442 @@
 import { Helmet } from "react-helmet-async";
-import { memo, useMemo, useEffect, useRef, useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import Galaxy from "@/components/Galaxy";
-import { Instagram, Linkedin, MessageCircle, Facebook, Phone, Mail, MapPin } from "lucide-react";
+import Particles from "@/components/Particles";
+import {
+  Globe,
+  Smartphone,
+  Code2,
+  Search,
+  Gamepad2,
+  Palette,
+  Wifi,
+  Wrench,
+  BookOpen,
+  Sparkles,
+  ArrowRight,
+  CheckCircle2
+} from "lucide-react";
 
 const services = [
   {
+    icon: Globe,
     title: "Custom Website Development",
-    points: [
+    description: "Build powerful, scalable, and brand-focused websites with clean custom code and future-ready architecture.",
+    features: [
       "Fully Customized Design & Development",
       "Scalable & Future-Ready Architecture",
-      "Unique Brand-Focused Layouts",
       "Clean, Secure Custom Code",
-      "Computer Vision Projects",
+      "Unique Brand-Focused Layouts"
     ],
+    accentColor: "from-cyan-500 to-blue-600"
   },
   {
-    title: "Portfolio & Personal Websites",
-    points: [
-      "Modern Visual Showcases",
-      "Simple & Smooth Navigation",
-      "Social Media & Contact Integration",
-      "High-Speed Performance",
-      "Strong Personal Branding",
-    ],
-  },
-  {
-    title: "Business & Corporate Websites",
-    points: [
-      "Professional & Trust-Building Design",
-      "Lead Generation & Inquiry Forms",
-      "SEO-Optimized Structure",
-      "Analytics & Tracking Ready",
-      "Scalable Business Growth Support",
-    ],
-  },
-  {
-    title: "Responsive Mobile Design",
-    points: [
-      "Mobile Optimized Layouts",
-      "Seamless Cross-Device Compatibility",
-      "Google Mobile-Friendly Standards",
-      "Reduced Bounce Rates",
-      "Enhanced User Reach",
-    ],
-  },
-  {
+    icon: Smartphone,
     title: "Mobile App Development",
-    points: [
+    description: "Native and cross-platform mobile applications with superior UI/UX and high-performance architecture.",
+    features: [
       "Android & iOS App Solutions",
       "User-Friendly UI & UX",
       "High Performance & Security",
-      "Scalable Backend Integration",
-      "App Store Deployment Support",
+      "App Store Deployment Support"
     ],
+    accentColor: "from-purple-500 to-pink-600"
   },
   {
+    icon: Code2,
     title: "Web Application Development",
-    points: [
+    description: "Create robust web applications with real-time features, secure data handling, and scalable architecture.",
+    features: [
       "Powerful Web-Based Applications",
       "Secure Data Handling",
       "Real-Time Features & APIs",
-      "Scalable System Architecture",
-      "Cloud-Ready Deployment",
+      "Cloud-Ready Deployment"
     ],
+    accentColor: "from-green-500 to-emerald-600"
   },
   {
-    title: "SEO Services for Market Reach",
-    points: [
-      "Search Engine Optimization (On-page & Technical SEO)",
-      "Keyword Research & Competitor Analysis",
-      "Website Performance & Speed Optimization",
-      "Improved Search Rankings & Organic Traffic",
-      "Long-Term Digital Visibility Growth",
-    ],
-  },
-  {
-    title: "Game Development",
-    points: [
-      "2D & 3D Game Development",
-      "Cross-Platform Game Solutions",
-      "Engaging Gameplay Mechanics",
-      "High-Quality Graphics & Animation",
-      "Game Testing & Optimization",
-    ],
-  },
-  {
+    icon: Palette,
     title: "UI / UX Design",
-    points: [
+    description: "User-centric designs with interactive prototypes and modern interfaces that boost engagement.",
+    features: [
       "User-Centric Design Approach",
       "Interactive Wireframes & Prototypes",
       "Clean & Modern Interfaces",
-      "Improved User Engagement",
-      "Brand-Consistent Visuals",
+      "Brand-Consistent Visuals"
     ],
+    accentColor: "from-orange-500 to-red-600"
   },
   {
-    title: "IoT Solutions & Hardware Projects",
-    points: [
+    icon: Search,
+    title: "SEO Services",
+    description: "Comprehensive SEO strategies to improve search rankings and drive organic traffic growth.",
+    features: [
+      "On-page & Technical SEO",
+      "Keyword Research & Analysis",
+      "Performance Optimization",
+      "Improved Search Rankings"
+    ],
+    accentColor: "from-yellow-500 to-orange-600"
+  },
+  {
+    icon: Gamepad2,
+    title: "Game Development",
+    description: "Engaging 2D & 3D games with stunning graphics and cross-platform compatibility.",
+    features: [
+      "2D & 3D Game Development",
+      "Cross-Platform Solutions",
+      "Engaging Gameplay Mechanics",
+      "High-Quality Graphics"
+    ],
+    accentColor: "from-pink-500 to-rose-600"
+  },
+  {
+    icon: Wifi,
+    title: "IoT Solutions",
+    description: "Smart device development with sensor integration and real-time cloud connectivity.",
+    features: [
       "Smart Device Development",
-      "Sensor & Microcontroller Integration",
+      "Sensor Integration",
       "Real-Time Data Monitoring",
-      "Cloud & Mobile Connectivity",
-      "Industry & Academic Ready Solutions",
+      "Cloud & Mobile Connectivity"
     ],
+    accentColor: "from-blue-500 to-indigo-600"
   },
   {
-    title: "Final Year Project Development",
-    points: [
-      "Complete Project Implementation",
-      "Latest Technologies & Domains",
+    icon: BookOpen,
+    title: "Final Year Projects",
+    description: "Complete project implementation with latest technologies, documentation, and presentation support.",
+    features: [
+      "Complete Implementation",
+      "Latest Technologies",
       "Working Models & Source Code",
-      "Detailed Documentation & Reports",
-      "Viva & Presentation Support",
+      "Viva & Presentation Support"
     ],
+    accentColor: "from-indigo-500 to-purple-600"
   },
   {
+    icon: Wrench,
     title: "Support & Maintenance",
-    points: [
-      "Continuous Website & App Monitoring",
+    description: "Continuous monitoring, security updates, and long-term technical assistance for your applications.",
+    features: [
+      "24/7 Monitoring",
       "Security Updates & Bug Fixes",
-      "Performance Optimization & Uptime Support",
-      "Feature Enhancements & Version Updates",
-      "Reliable Long-Term Technical Assistance",
+      "Performance Optimization",
+      "Feature Enhancements"
     ],
-  },
+    accentColor: "from-teal-500 to-cyan-600"
+  }
 ];
 
-// Optimized Service Card
-const ServiceCard = memo(({ service, index }: { service: typeof services[0]; index: number }) => {
-  const isEven = index % 2 === 0;
-  const cardRef = useRef<HTMLDivElement>(null);
-  const [isVisible, setIsVisible] = useState(false);
-  const [shouldAnimate, setShouldAnimate] = useState(false);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          // Pre-apply will-change to prepare the compositor
-          setShouldAnimate(true);
-
-          // Micro-stagger for internal scheduling
-          const delay = (index % 3) * 50;
-
-          const timer = setTimeout(() => {
-            setIsVisible(true);
-
-            // Clean up will-change after animation finishes (700ms transition)
-            const cleanupTimer = setTimeout(() => {
-              setShouldAnimate(false);
-            }, 800);
-
-            return () => clearTimeout(cleanupTimer);
-          }, delay);
-
-          observer.unobserve(entry.target);
-          return () => clearTimeout(timer);
-        }
-      },
-      { threshold: 0.1, rootMargin: "100px" }
-    );
-
-    if (cardRef.current) {
-      observer.observe(cardRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, [index]);
-
-  return (
-    <div
-      ref={cardRef}
-      className={`relative flex flex-col md:flex-row items-center gap-8 ${isEven ? "md:flex-row" : "md:flex-row-reverse"
-        } transition-all duration-700 ease-out`}
-      style={{
-        opacity: isVisible ? 1 : 0,
-        transform: isVisible ? 'translate3d(0, 0, 0)' : 'translate3d(0, 30px, 0)',
-        willChange: shouldAnimate ? 'transform, opacity' : 'auto',
-      }}
-    >
-      {/* Timeline dot */}
-      <div
-        className="hidden md:flex absolute left-1/2 w-4 h-4 rounded-full bg-primary z-10"
-        style={{
-          transform: 'translateX(-50%) translateZ(0)',
-          boxShadow: '0 0 12px hsl(174 72% 56% / 0.5)',
-        }}
-      />
-
-      {/* Card */}
-      <div className={`w-full md:w-[calc(50%-2rem)] ${isEven ? "md:pr-8" : "md:pl-8"}`}>
-        <div
-          className="service-card-optimized p-6 md:p-8 rounded-2xl group relative"
-          style={{
-            transform: 'translateZ(0)',
-          }}
-        >
-          {/* Subtle hover overlay for the glow effect to avoid heavy repaints */}
-          <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none bg-gradient-to-br from-primary/5 via-transparent to-accent/5 rounded-2xl" style={{ transform: 'translateZ(0)' }} />
-
-          <div className="relative z-10 flex items-start gap-4 mb-6">
-            <span
-              className="flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-primary-foreground font-bold text-lg"
-              style={{ transform: 'translateZ(0)' }}
-            >
-              {String(index + 1).padStart(2, "0")}
-            </span>
-            <h3 className="text-xl md:text-2xl font-semibold text-foreground group-hover:text-primary transition-colors duration-200">
-              {service.title}
-            </h3>
-          </div>
-          <ul className="relative z-10 space-y-3 pl-14">
-            {service.points.map((point, pointIndex) => (
-              <li
-                key={pointIndex}
-                className="flex items-start gap-3 text-muted-foreground"
-              >
-                <span className="w-1.5 h-1.5 rounded-full bg-primary mt-2 flex-shrink-0" />
-                <span>{point}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-
-      {/* Spacer for opposite side */}
-      <div className="hidden md:block w-[calc(50%-2rem)]" aria-hidden="true" />
-    </div>
-  );
-});
-
-ServiceCard.displayName = 'ServiceCard';
-
-// Optimized Social Button
-const SocialButton = memo(({
-  href,
-  hoverColor,
-  icon: Icon,
-  label
-}: {
-  href: string;
-  hoverColor: string;
-  icon: React.ComponentType<{ className?: string }>;
-  label: string;
-}) => (
-  <a
-    href={href}
-    target="_blank"
-    rel="noopener noreferrer"
-    className={`social-btn-optimized w-14 h-14 rounded-full flex items-center justify-center group`}
-    style={{
-      transform: 'translate3d(0, 0, 0)',
-    }}
-    aria-label={label}
-    data-hover-color={hoverColor}
-  >
-    <Icon className={`w-6 h-6 text-muted-foreground group-hover:${hoverColor} transition-colors duration-200`} />
-  </a>
-));
-
-SocialButton.displayName = 'SocialButton';
-
 const Services = () => {
-  const servicesList = useMemo(() => services, []);
-  const galaxyRef = useRef<HTMLDivElement>(null);
-  const [galaxyActive, setGalaxyActive] = useState(true);
+  const [activeService, setActiveService] = useState<number | null>(null);
+  const heroRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setGalaxyActive(entry.isIntersecting);
-      },
-      { threshold: 0 }
-    );
+    const handleScroll = () => {
+      const scrolled = window.scrollY;
+      if (heroRef.current) {
+        heroRef.current.style.transform = `translateY(${scrolled * 0.5}px)`;
+      }
+    };
 
-    if (galaxyRef.current) {
-      observer.observe(galaxyRef.current);
-    }
-
-    return () => observer.disconnect();
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   return (
     <>
       <Helmet>
-        <title>Services | DexLora Innovations</title>
+        <title>Our Services | DexLora Innovations</title>
         <meta
           name="description"
-          content="DexLora Innovations offers custom website development, mobile apps, UI/UX design, IoT solutions, and more. Explore our full range of digital services."
+          content="Explore DexLora Innovations' comprehensive digital services including custom web development, mobile apps, UI/UX design, IoT solutions, and more."
         />
       </Helmet>
 
       <style>{`
-        /* Optimized glass effect - promoting to compositor layer and simplifying paint */
-        .service-card-optimized {
-          background: hsl(222 47% 8% / 0.7);
-          backdrop-filter: blur(12px);
-          -webkit-backdrop-filter: blur(12px);
-          border: 1px solid hsl(222 30% 18% / 0.3);
-          box-shadow: 0 0 30px -10px hsl(174 72% 56% / 0.1);
-          transform: translate3d(0, 0, 0);
-          backface-visibility: hidden;
-          perspective: 1000px;
-          /* GPU promotion managed via JS will-change logic */
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes float {
+          0%, 100% {
+            transform: translateY(0px);
+          }
+          50% {
+            transform: translateY(-20px);
+          }
+        }
+
+        @keyframes glow {
+          0%, 100% {
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.3);
+          }
+          50% {
+            box-shadow: 0 0 40px rgba(56, 189, 248, 0.6);
+          }
+        }
+
+        .service-card {
+          animation: fadeInUp 0.6s ease-out;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          background: rgba(17, 24, 39, 0.6);
+          backdrop-filter: blur(20px);
+          border: 1px solid rgba(255, 255, 255, 0.1);
           position: relative;
+          overflow: hidden;
         }
 
-        /* Use pseudo-element for hover shadow/border to avoid repainting the main card */
-        .service-card-optimized::after {
-          content: "";
+        .service-card::before {
+          content: '';
           position: absolute;
-          inset: 0;
-          border-radius: inherit;
-          pointer-events: none;
-          box-shadow: 0 0 40px -10px hsl(174 72% 56% / 0.2);
-          border: 1px solid hsl(174 72% 56% / 0.4);
-          opacity: 0;
-          transition: opacity 0.3s ease-out;
-          will-change: opacity;
-          z-index: 20; /* Above content to ensure border visibility, or below? Border should be on top. */
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+          transition: left 0.5s;
         }
 
-        .service-card-optimized:hover::after {
-          opacity: 1;
+        .service-card:hover::before {
+          left: 100%;
         }
-        
-        /* Optimized social buttons */
-        .social-btn-optimized {
-          background: hsl(222 47% 8% / 0.5);
-          border: 1px solid hsl(222 30% 18% / 0.3);
-          backface-visibility: hidden;
-          -webkit-backface-visibility: hidden;
-          transform: translate3d(0, 0, 0);
+
+        .service-card:hover {
+          transform: translateY(-10px) scale(1.02);
+          border-color: rgba(56, 189, 248, 0.5);
+          box-shadow: 0 20px 60px rgba(56, 189, 248, 0.2);
+        }
+
+        .service-card.active {
+          border-color: rgba(56, 189, 248, 0.8);
+          box-shadow: 0 20px 60px rgba(56, 189, 248, 0.4);
+        }
+
+        .gradient-text {
+          background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+        }
+
+        .icon-wrapper {
+          transition: all 0.3s ease;
+        }
+
+        .service-card:hover .icon-wrapper {
+          transform: scale(1.1) rotate(5deg);
+        }
+
+        .feature-item {
+          opacity: 0;
+          animation: fadeInUp 0.4s ease-out forwards;
+        }
+
+        .feature-item:nth-child(1) { animation-delay: 0.1s; }
+        .feature-item:nth-child(2) { animation-delay: 0.2s; }
+        .feature-item:nth-child(3) { animation-delay: 0.3s; }
+        .feature-item:nth-child(4) { animation-delay: 0.4s; }
+
+        .cta-button {
           position: relative;
-          overflow: hidden; /* For social buttons, overflow hidden is fine as they are small */
-          transition: transform 0.2s ease-out; 
+          overflow: hidden;
+          transition: all 0.3s ease;
         }
 
-        .social-btn-optimized:hover {
-          transform: scale(1.05) translate3d(0,0,0);
-        }
-
-        /* Use pseudo for social hover colors to avoid repaints */
-        .social-btn-optimized::before {
-          content: "";
+        .cta-button::before {
+          content: '';
           position: absolute;
-          inset: 0;
-          background: transparent;
-          border-radius: inherit;
-          border: 1px solid transparent;
-          box-shadow: none;
-          opacity: 0;
-          transition: opacity 0.2s ease-out;
-          pointer-events: none;
+          top: 50%;
+          left: 50%;
+          width: 0;
+          height: 0;
+          border-radius: 50%;
+          background: rgba(255, 255, 255, 0.2);
+          transform: translate(-50%, -50%);
+          transition: width 0.6s, height 0.6s;
         }
 
-        .social-btn-optimized:hover::before {
-          opacity: 1;
-        }
-        
-        .social-btn-optimized[data-hover-color="primary"]::before {
-          border-color: hsl(174 72% 56% / 0.5);
-          box-shadow: 0 4px 20px -4px hsl(174 72% 56% / 0.3);
+        .cta-button:hover::before {
+          width: 300px;
+          height: 300px;
         }
 
-        .social-btn-optimized[data-hover-color="pink"]::before {
-          border-color: hsl(330 80% 60% / 0.5);
-          box-shadow: 0 4px 20px -4px hsl(330 80% 60% / 0.3);
+        .hero-title {
+          font-size: clamp(3rem, 8vw, 7rem);
+          line-height: 1.1;
+          font-weight: 800;
+          letter-spacing: -0.02em;
         }
-        
-        .social-btn-optimized[data-hover-color="green"]::before {
-          border-color: hsl(142 70% 45% / 0.5);
-          box-shadow: 0 4px 20px -4px hsl(142 70% 45% / 0.3);
+
+        .particles-hero {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          z-index: 0;
         }
-        
-        .social-btn-optimized[data-hover-color="blue"]::before {
-          border-color: hsl(210 90% 50% / 0.5);
-          box-shadow: 0 4px 20px -4px hsl(210 90% 50% / 0.3);
-        }
-        
-        .social-btn-optimized[data-hover-color="sky"]::before {
-          border-color: hsl(200 90% 50% / 0.5);
-          box-shadow: 0 4px 20px -4px hsl(200 90% 50% / 0.3);
-        }
-        
-        .social-btn-optimized[data-hover-color="blue-dark"]::before {
-          border-color: hsl(220 90% 50% / 0.5);
-          box-shadow: 0 4px 20px -4px hsl(220 90% 50% / 0.3);
-        }
-        
-        /* Timeline optimization */
-        .timeline-line-optimized {
-          background: linear-gradient(to bottom, 
-            hsl(174 72% 56% / 0.5), 
-            hsl(200 80% 50% / 0.3), 
-            hsl(174 72% 56% / 0.5)
-          );
-          transform: translate3d(0, 0, 0);
+
+        .content-wrapper {
+          position: relative;
+          z-index: 10;
         }
       `}</style>
 
       <Navbar />
 
-      <main className="min-h-screen bg-background pt-16 relative overflow-x-hidden">
-        {/* Hero Section */}
-        <section className="section-padding py-20 md:py-32">
-          <div className="max-w-7xl mx-auto">
-            <div className="grid md:grid-cols-2 gap-12 md:gap-16 items-center">
-              <div className="animate-fade-up" style={{ willChange: 'transform, opacity' }}>
-                <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-foreground leading-tight">
-                  OUR
-                  <br />
-                  <span className="gradient-text">SERVICES</span>
-                </h1>
-                <div className="w-24 h-1 bg-gradient-to-r from-primary to-accent mt-6 rounded-full" />
-              </div>
+      <main className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white overflow-hidden">
+        {/* Hero Section with Particles */}
+        <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
+          <div className="particles-hero">
+            <Particles
+              particleColors={['#38bdf8', '#818cf8', '#c084fc']}
+              particleCount={300}
+              particleSpread={15}
+              speed={0.15}
+              particleBaseSize={120}
+              moveParticlesOnHover={true}
+              alphaParticles={true}
+              disableRotation={false}
+              sizeRandomness={1.2}
+              cameraDistance={25}
+            />
+          </div>
 
-              <div className="animate-fade-up-delay-1" style={{ willChange: 'transform, opacity' }}>
-                <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
-                  DexLora Innovations delivers end-to-end digital and smart technology solutions.
-                  We blend creativity, engineering, and innovation to build scalable products.
-                  From websites and applications to IoT hardware and UI/UX design,
-                  our services are crafted to support growth, performance, and future readiness.
-                  Every solution is tailored to real-world business and technology needs.
-                </p>
-              </div>
+          <div ref={heroRef} className="content-wrapper max-w-7xl mx-auto px-6 text-center">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-8 backdrop-blur-sm">
+              <Sparkles className="w-4 h-4 text-cyan-400" />
+              <span className="text-sm text-cyan-400 font-medium">Premium Digital Solutions</span>
+            </div>
+
+            <h1 className="hero-title gradient-text mb-6">
+              Our Services
+            </h1>
+
+            <p className="text-xl md:text-2xl text-slate-300 max-w-3xl mx-auto mb-12 leading-relaxed">
+              Transform your ideas into reality with cutting-edge technology and creative excellence.
+              We deliver comprehensive digital solutions tailored to your success.
+            </p>
+
+            <div className="flex flex-wrap items-center justify-center gap-4">
+              <button
+                onClick={() => document.getElementById('services-grid')?.scrollIntoView({ behavior: 'smooth' })}
+                className="cta-button px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-full font-semibold text-lg flex items-center gap-2 hover:shadow-2xl hover:shadow-cyan-500/50"
+              >
+                Explore Services
+                <ArrowRight className="w-5 h-5" />
+              </button>
+              <a
+                href="/contact"
+                className="px-8 py-4 bg-white/5 border border-white/20 rounded-full font-semibold text-lg hover:bg-white/10 transition-all backdrop-blur-sm"
+              >
+                Get Started
+              </a>
+            </div>
+          </div>
+
+          {/* Scroll Indicator */}
+          <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce">
+            <div className="w-6 h-10 rounded-full border-2 border-white/30 flex items-start justify-center p-2">
+              <div className="w-1.5 h-3 bg-white/60 rounded-full" />
             </div>
           </div>
         </section>
 
-        {/* Services Flow Section */}
-        <section className="section-padding py-16 md:py-24 relative" ref={galaxyRef}>
-          <div
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              width: '100%',
-              height: '100%',
-              zIndex: 0,
-              contain: 'strict',
-              transform: 'translateZ(0)'
-            }}
-          >
-            {galaxyActive && (
-              <Galaxy
-                mouseRepulsion={false}
-                mouseInteraction={false}
-                density={0.6}
-                glowIntensity={0.25}
-                saturation={0.5}
-                hueShift={240}
-                speed={0.35}
-              />
-            )}
-          </div>
+        {/* Services Grid */}
+        <section id="services-grid" className="py-20 px-6 relative">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl md:text-5xl font-bold mb-6">
+                What We <span className="gradient-text">Offer</span>
+              </h2>
+              <p className="text-xl text-slate-400 max-w-2xl mx-auto">
+                Comprehensive solutions designed to elevate your digital presence and drive business growth
+              </p>
+            </div>
 
-          <div className="max-w-6xl mx-auto relative" style={{ zIndex: 1, contain: 'layout' }}>
-            <div className="relative">
-              <div
-                className="hidden md:block absolute left-1/2 top-0 bottom-0 w-px timeline-line-optimized"
-                aria-hidden="true"
-              />
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {services.map((service, index) => (
+                <div
+                  key={index}
+                  className={`service-card rounded-2xl p-8 ${activeService === index ? 'active' : ''}`}
+                  onMouseEnter={() => setActiveService(index)}
+                  onMouseLeave={() => setActiveService(null)}
+                  style={{
+                    animationDelay: `${index * 0.1}s`
+                  }}
+                >
+                  <div className={`icon-wrapper w-16 h-16 rounded-2xl bg-gradient-to-br ${service.accentColor} flex items-center justify-center mb-6`}>
+                    <service.icon className="w-8 h-8 text-white" />
+                  </div>
 
-              <div className="space-y-12 md:space-y-16">
-                {servicesList.map((service, index) => (
-                  <ServiceCard
-                    key={index}
-                    service={service}
-                    index={index}
-                  />
-                ))}
-              </div>
+                  <h3 className="text-2xl font-bold mb-3 text-white">
+                    {service.title}
+                  </h3>
+
+                  <p className="text-slate-400 mb-6 leading-relaxed">
+                    {service.description}
+                  </p>
+
+                  <ul className="space-y-3 mb-6">
+                    {service.features.map((feature, fIndex) => (
+                      <li
+                        key={fIndex}
+                        className={`feature-item flex items-start gap-3 text-sm text-slate-300 ${activeService === index ? '' : 'opacity-0'}`}
+                        style={{
+                          animation: activeService === index ? `fadeInUp 0.4s ease-out ${fIndex * 0.1}s forwards` : 'none'
+                        }}
+                      >
+                        <CheckCircle2 className="w-5 h-5 text-cyan-400 flex-shrink-0 mt-0.5" />
+                        <span>{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  <a
+                    href="/contact"
+                    className={`inline-flex items-center gap-2 text-sm font-semibold bg-gradient-to-r ${service.accentColor} bg-clip-text text-transparent hover:gap-3 transition-all`}
+                  >
+                    Learn More
+                    <ArrowRight className="w-4 h-4" style={{ color: 'currentColor', opacity: 0.7 }} />
+                  </a>
+                </div>
+              ))}
             </div>
           </div>
         </section>
 
-        {/* Footer / Contact Strip */}
-        <section className="section-padding py-16 md:py-20 bg-card/50 border-t border-border/30 relative z-10">
-          <div className="max-w-7xl mx-auto">
-            <div className="grid md:grid-cols-2 gap-12 md:gap-16 items-start">
-              <div className="space-y-6">
-                <h2 className="text-3xl md:text-4xl font-bold text-foreground">
-                  DexLora <span className="gradient-text">Innovations</span>
-                </h2>
-                <p className="text-lg text-muted-foreground leading-relaxed max-w-lg">
-                  Anyone with a project idea can propose it to us. We help turn ideas into websites, mobile apps, hardware projects, or games. From concept to completion, we support full development. Idea owners can collaborate and customize their project. We transform innovative ideas into real products.
-                </p>
-                <div className="space-y-4 pt-4">
-                  <div className="flex items-center gap-3 text-muted-foreground">
-                    <MapPin className="w-5 h-5 text-primary" />
-                    <span>Tamil Nadu, India</span>
-                  </div>
-                  <div className="flex items-center gap-3 text-muted-foreground">
-                    <Mail className="w-5 h-5 text-primary" />
-                    <a
-                      href="mailto:dexlora.innovations@gmail.com"
-                      className="hover:text-foreground transition-colors duration-200"
-                    >
-                      dexlora.innovations@gmail.com
-                    </a>
-                  </div>
-                  <div className="flex items-center gap-3 text-muted-foreground">
-                    <Phone className="w-5 h-5 text-primary" />
-                    <a
-                      href="tel:+917092269839"
-                      className="hover:text-foreground transition-colors duration-200"
-                    >
-                      +91 7092269839
-                    </a>
-                  </div>
-                </div>
-              </div>
+        {/* CTA Section */}
+        <section className="py-20 px-6 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 via-purple-500/10 to-pink-500/10" />
 
-              <div className="flex flex-col items-center justify-center gap-6 md:ml-auto">
-                <h3 className="text-xl font-semibold text-foreground">Connect With Us</h3>
-                <div className="flex flex-wrap items-center justify-center gap-4">
-                  <SocialButton href="mailto:dexlora.innovations@gmail.com" hoverColor="text-primary" icon={Mail} label="Email Us" />
-                  <SocialButton href="https://www.instagram.com/dexlora_innovations?utm_source=qr&igsh=MXU2amV0eGZyeWNscQ==" hoverColor="text-pink-500" icon={Instagram} label="Instagram" />
-                  <SocialButton href="https://chat.whatsapp.com/FOcvkxkZRoZKLaQTKU3uCI" hoverColor="text-green-500" icon={MessageCircle} label="WhatsApp" />
-                  <SocialButton href="https://www.linkedin.com/in/dexlora-innovations/" hoverColor="text-blue-500" icon={Linkedin} label="LinkedIn" />
-                  <SocialButton
-                    href="https://x.com/DexLora3994"
-                    hoverColor="text-sky-500"
-                    icon={() => (
-                      <svg className="w-6 h-6 transition-colors duration-200" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-                      </svg>
-                    )}
-                    label="Twitter"
-                  />
-                  <SocialButton href="https://www.facebook.com/profile.php?id=61585169746090" hoverColor="text-blue-600" icon={Facebook} label="Facebook" />
-                </div>
-              </div>
-            </div>
+          <div className="max-w-4xl mx-auto text-center relative z-10">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">
+              Ready to Start Your <span className="gradient-text">Project?</span>
+            </h2>
+            <p className="text-xl text-slate-300 mb-10 max-w-2xl mx-auto">
+              Let's collaborate and bring your vision to life with innovative solutions and exceptional design.
+            </p>
+            <a
+              href="/contact"
+              className="cta-button inline-flex items-center gap-3 px-10 py-5 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-full font-bold text-lg hover:shadow-2xl hover:shadow-cyan-500/50 transition-all"
+            >
+              Get in Touch
+              <ArrowRight className="w-6 h-6" />
+            </a>
           </div>
         </section>
       </main>
+
       <Footer />
     </>
   );
