@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 import dexloraLogo from "@/assets/logo-new.jpg";
 import LightPillar from './LightPillar';
 
@@ -108,18 +109,18 @@ const HeroSection = () => {
 
         {/* CTA Buttons */}
         <div className="animate-fade-up-delay-4 flex flex-wrap items-center justify-center gap-4" style={{ willChange: 'transform, opacity' }}>
-          <a
-            href="/services"
+          <Link
+            to="/services"
             className="px-8 py-3 bg-gradient-to-r from-primary to-accent text-primary-foreground font-semibold rounded-full hover:opacity-90 hover:scale-105 transition-all duration-300 shadow-lg shadow-primary/25"
           >
             Learn More
-          </a>
-          <a
-            href="/contact"
+          </Link>
+          <Link
+            to="/contact"
             className="px-8 py-3 border-2 border-primary/50 text-foreground font-semibold rounded-full hover:bg-primary/10 hover:border-primary transition-all duration-300"
           >
             Contact Us
-          </a>
+          </Link>
         </div>
       </div>
     </section>
