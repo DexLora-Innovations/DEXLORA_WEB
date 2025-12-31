@@ -1,4 +1,6 @@
+import { useState, useEffect, useRef } from "react";
 import { Phone, Mail, Linkedin } from "lucide-react";
+import Particles from "./Particles";
 
 interface Founder {
   name: string;
@@ -6,6 +8,7 @@ interface Founder {
   phone: string;
   email: string;
   linkedin: string;
+  photo: string;
 }
 
 const founders: Founder[] = [
@@ -15,6 +18,7 @@ const founders: Founder[] = [
     phone: "9445180946",
     email: "aravindmuthiah23@gmail.com",
     linkedin: "https://www.linkedin.com/in/aravind-muthiah-m/",
+    photo: "/aravind.jpg",
   },
   {
     name: "Vinnarasu R",
@@ -22,6 +26,7 @@ const founders: Founder[] = [
     phone: "7092269839",
     email: "r.vinnarasu2006@gmail.com",
     linkedin: "https://www.linkedin.com/in/vinnarasu-r-50439b328/",
+    photo: "/vinnarasu.png",
   },
   {
     name: "Pruthevi S",
@@ -29,23 +34,25 @@ const founders: Founder[] = [
     phone: "7200402867",
     email: "pruthevis9d@gmail.com",
     linkedin: "https://www.linkedin.com/in/pruthevi-s/",
+    photo: "/pruthevi.jpg",
   },
 ];
 
 const FounderCard = ({ founder, index }: { founder: Founder; index: number }) => {
   return (
-    <div 
+    <div
       className="glass-card-hover p-8 flex flex-col items-center text-center group"
       style={{ animationDelay: `${index * 0.15}s` }}
     >
-      {/* Avatar placeholder with gradient border */}
+      {/* Profile photo with gradient border */}
       <div className="relative mb-6">
         <div className="w-24 h-24 rounded-full bg-gradient-to-br from-primary via-accent to-secondary p-0.5">
-          <div className="w-full h-full rounded-full bg-card flex items-center justify-center">
-            <span className="text-3xl font-bold gradient-text">
-              {founder.name.split(' ').map(n => n[0]).join('')}
-            </span>
-          </div>
+          <img
+            src={founder.photo}
+            alt={founder.name}
+            className="w-full h-full rounded-full object-cover"
+            style={index === 0 ? { objectPosition: 'top' } : undefined}
+          />
         </div>
         <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary/40 to-secondary/40 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
       </div>
@@ -60,14 +67,14 @@ const FounderCard = ({ founder, index }: { founder: Founder; index: number }) =>
 
       {/* Contact info */}
       <div className="space-y-3 mb-6 w-full">
-        <a 
+        <a
           href={`tel:+91${founder.phone}`}
           className="flex items-center justify-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
         >
           <Phone className="w-4 h-4 text-primary" />
           <span className="text-sm">+91 {founder.phone}</span>
         </a>
-        <a 
+        <a
           href={`mailto:${founder.email}`}
           className="flex items-center justify-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
         >
@@ -91,8 +98,42 @@ const FounderCard = ({ founder, index }: { founder: Founder; index: number }) =>
 };
 
 const FoundersSection = () => {
+  const [isVisible, setIsVisible] = useState(false);
+  const sectionRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsVisible(entry.isIntersecting);
+      },
+      { threshold: 0 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <section className="section-padding relative overflow-hidden" id="founders">
+    <section ref={sectionRef} className="section-padding relative overflow-hidden" id="founders">
+      {/* Particles Background - Optimized visibility and count */}
+      <div className="absolute inset-0 z-0" style={{ contain: 'strict', transform: 'translateZ(0)' }}>
+        {isVisible && (
+          <Particles
+            particleColors={['#ffffff', '#ffffff']}
+            particleCount={30} // Reduced from 200 for performance
+            particleSpread={10}
+            speed={0.1}
+            particleBaseSize={100}
+            moveParticlesOnHover={true}
+            alphaParticles={false}
+            disableRotation={false}
+          />
+        )}
+      </div>
+
       {/* Background glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[600px] rounded-full bg-gradient-radial from-primary/5 via-transparent to-transparent blur-3xl" />
 

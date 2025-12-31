@@ -40,7 +40,7 @@
     --gradient-start: 174 72% 56%;
     --gradient-mid: 200 80% 50%;
     --gradient-end: 263 70% 58%;
-    
+
     --glow-primary: 174 72% 56%;
     --glow-secondary: 263 70% 58%;
 
@@ -111,20 +111,25 @@
 
 @layer components {
   .glass-card {
-    @apply bg-card/40 backdrop-blur-xl border border-border/50 rounded-2xl;
-    box-shadow: 
+    @apply bg-card/50 backdrop-blur-md border border-border/50 rounded-2xl;
+    box-shadow:
       0 0 40px -10px hsl(var(--glow-primary) / 0.15),
       0 0 80px -20px hsl(var(--glow-secondary) / 0.1);
+    /* GPU acceleration for smoother scrolling */
+    transform: translate3d(0, 0, 0);
+    will-change: transform;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
   }
 
   .glass-card-hover {
-    @apply glass-card transition-all duration-500;
+    @apply glass-card transition-transform duration-300 ease-out;
   }
 
   .glass-card-hover:hover {
     @apply border-primary/30;
-    transform: translateY(-8px);
-    box-shadow: 
+    transform: translate3d(0, -8px, 0);
+    box-shadow:
       0 0 60px -10px hsl(var(--glow-primary) / 0.25),
       0 0 100px -20px hsl(var(--glow-secondary) / 0.2);
   }
@@ -145,14 +150,12 @@
     inset: 0;
     padding: 1px;
     border-radius: inherit;
-    background: linear-gradient(
-      135deg,
-      hsl(var(--gradient-start)),
-      hsl(var(--gradient-mid)),
-      hsl(var(--gradient-end))
-    );
-    -webkit-mask: 
-      linear-gradient(#fff 0 0) content-box, 
+    background: linear-gradient(135deg,
+        hsl(var(--gradient-start)),
+        hsl(var(--gradient-mid)),
+        hsl(var(--gradient-end)));
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
       linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;
@@ -160,7 +163,7 @@
   }
 
   .glow-effect {
-    box-shadow: 
+    box-shadow:
       0 0 40px -10px hsl(var(--glow-primary) / 0.3),
       0 0 80px -20px hsl(var(--glow-secondary) / 0.2);
   }
@@ -218,18 +221,24 @@
 }
 
 @keyframes float {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0px);
   }
+
   50% {
     transform: translateY(-20px);
   }
 }
 
 @keyframes pulse-slow {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 0.4;
   }
+
   50% {
     opacity: 0.8;
   }
@@ -239,6 +248,7 @@
   0% {
     box-shadow: 0 0 20px hsl(var(--glow-primary) / 0.2);
   }
+
   100% {
     box-shadow: 0 0 40px hsl(var(--glow-primary) / 0.4);
   }
@@ -247,11 +257,12 @@
 @keyframes fade-up {
   0% {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translate3d(0, 30px, 0);
   }
+
   100% {
     opacity: 1;
-    transform: translateY(0);
+    transform: translate3d(0, 0, 0);
   }
 }
 
@@ -278,18 +289,23 @@
 }
 
 @keyframes particle-float {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0) translateX(0);
     opacity: 0.3;
   }
+
   25% {
     transform: translateY(-100px) translateX(50px);
     opacity: 0.8;
   }
+
   50% {
     transform: translateY(-200px) translateX(-30px);
     opacity: 0.5;
   }
+
   75% {
     transform: translateY(-100px) translateX(-50px);
     opacity: 0.7;
