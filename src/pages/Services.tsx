@@ -448,9 +448,9 @@ const Services = () => {
             {galaxyActive && (
               <Particles
                 particleColors={['#ffffff', '#38bdf8']}
-                particleCount={200}
+                particleCount={500}
                 particleSpread={10}
-                speed={0.1}
+                speed={0.15}
                 particleBaseSize={100}
                 moveParticlesOnHover={true}
                 alphaParticles={false}
