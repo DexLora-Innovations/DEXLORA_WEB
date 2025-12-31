@@ -90,54 +90,27 @@ const ContactForm = () => {
         setIsSubmitting(true);
 
         try {
-            let success = false;
+            // Use Web3Forms - it's free and works without API key for basic forms
+            const response = await fetch("https://api.web3forms.com/submit", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Accept: "application/json",
+                },
+                body: JSON.stringify({
+                    access_key: import.meta.env.VITE_WEB3FORMS_KEY || "YOUR_ACCESS_KEY",
+                    name: formData.name,
+                    email: formData.email,
+                    subject: `[DexLora Contact] ${formData.subject}`,
+                    message: formData.message,
+                    from_name: "DexLora Innovations Website",
+                    to: "dexlora.innovations@gmail.com",
+                }),
+            });
 
-            // Try Formspree first (already configured and working)
-            if (FORMSPREE_ID) {
-                const formspreeResponse = await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Accept: "application/json",
-                    },
-                    body: JSON.stringify({
-                        name: formData.name,
-                        email: formData.email,
-                        _subject: `[DexLora Contact] ${formData.subject}`,
-                        message: formData.message,
-                    }),
-                });
+            const result = await response.json();
 
-                if (formspreeResponse.ok) {
-                    success = true;
-                }
-            }
-
-            // Fallback to Web3Forms if Formspree fails and Web3Forms key is configured
-            if (!success && WEB3FORMS_ACCESS_KEY && WEB3FORMS_ACCESS_KEY !== "YOUR_ACCESS_KEY_HERE") {
-                const web3Response = await fetch("https://api.web3forms.com/submit", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Accept: "application/json",
-                    },
-                    body: JSON.stringify({
-                        access_key: WEB3FORMS_ACCESS_KEY,
-                        name: formData.name,
-                        email: formData.email,
-                        subject: `[DexLora Contact] ${formData.subject}`,
-                        message: formData.message,
-                        from_name: "DexLora Innovations Website",
-                    }),
-                });
-
-                const result = await web3Response.json();
-                if (result.success) {
-                    success = true;
-                }
-            }
-
-            if (success) {
+            if (result.success) {
                 setIsSuccess(true);
                 toast({
                     title: "Message Sent Successfully! 🎉",
@@ -148,7 +121,7 @@ const ContactForm = () => {
                 // Reset success state after 3 seconds
                 setTimeout(() => setIsSuccess(false), 3000);
             } else {
-                throw new Error("Failed to send message");
+                throw new Error(result.message || "Failed to send message");
             }
         } catch (error) {
             console.error("Form submission error:", error);
